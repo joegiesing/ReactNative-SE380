@@ -6,7 +6,8 @@ import { StatusBar, Platform } from 'react-native';
 import PhotoGallery from './screens/PhotoGallery';
 import PhotoDetailScreen from './screens/PhotoDetailScreen';
 import PhotoModal from './screens/PhotoModal';
-import WeatherAppScreen from './screens/WeatherAppScreen';
+import CurrentWeatherScreen from './screens/CurrentWeatherScreen';
+import ForecastTabScreen from './screens/ForecastTabScreen';
 
 export interface ImageData {
   id: number;
@@ -19,8 +20,13 @@ export type PhotoGalleryStackParamList = {
   PhotoModal: { photo: ImageData };
 };
 
+export type WeatherDrawerParamList = {
+  CurrentWeather: undefined;
+  Forecast: undefined;
+};
+
 export type WeatherStackParamList = {
-  WeatherApp: undefined;
+  WeatherDrawer: undefined;
 };
 
 export type DrawerParamList = {
@@ -30,13 +36,13 @@ export type DrawerParamList = {
 
 const PhotoGalleryStack = createStackNavigator<PhotoGalleryStackParamList>();
 const WeatherStack = createStackNavigator<WeatherStackParamList>();
+const WeatherDrawer = createDrawerNavigator<WeatherDrawerParamList>();
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 // Photo Gallery Stack Navigator
 const PhotoGalleryStackNavigator = () => {
   return (
     <PhotoGalleryStack.Navigator
-      id={undefined}
       screenOptions={{
         headerStyle: {
           backgroundColor: '#fff',
@@ -76,25 +82,65 @@ const PhotoGalleryStackNavigator = () => {
   );
 };
 
-// Weather App Stack Navigator
-const WeatherStackNavigator = () => {
+// Weather App Drawer Navigator
+const WeatherDrawerNavigator = () => {
   return (
-    <WeatherStack.Navigator
-      id={undefined}
+    <WeatherDrawer.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: '#fff',
+        headerShown: true,
+        drawerPosition: 'left',
+        drawerType: 'back',
+        swipeEnabled: true,
+        drawerStyle: {
+          backgroundColor: '#f8f9fa',
+          width: 280,
         },
-        headerTintColor: '#000',
+        drawerActiveTintColor: '#007AFF',
+        drawerInactiveTintColor: '#666',
+        drawerLabelStyle: {
+          fontSize: 16,
+          fontWeight: '500',
+        },
+        headerStyle: {
+          backgroundColor: '#007AFF',
+        },
+        headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
         },
       }}
     >
+      <WeatherDrawer.Screen 
+        name="CurrentWeather" 
+        component={CurrentWeatherScreen}
+        options={{ 
+          drawerLabel: 'Current Weather',
+          title: 'Current Weather'
+        }}
+      />
+      <WeatherDrawer.Screen 
+        name="Forecast" 
+        component={ForecastTabScreen}
+        options={{ 
+          drawerLabel: 'Forecast',
+          title: 'Weather Forecast'
+        }}
+      />
+    </WeatherDrawer.Navigator>
+  );
+};
+
+// Weather App Stack Navigator
+const WeatherStackNavigator = () => {
+  return (
+    <WeatherStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <WeatherStack.Screen 
-        name="WeatherApp" 
-        component={WeatherAppScreen}
-        options={{ title: 'Weather App' }}
+        name="WeatherDrawer" 
+        component={WeatherDrawerNavigator}
       />
     </WeatherStack.Navigator>
   );
@@ -109,7 +155,6 @@ const App = () => {
         translucent={Platform.OS === 'android'}
       />
       <Drawer.Navigator
-        id={undefined}
         initialRouteName="PhotoGalleryStack"
         screenOptions={{
           headerShown: false,
@@ -132,7 +177,7 @@ const App = () => {
           name="PhotoGalleryStack" 
           component={PhotoGalleryStackNavigator}
           options={{ 
-            drawerLabel: '📸 Photo Gallery (HW2 & HW3)',
+            drawerLabel: 'Photo Gallery (HW2 & HW3)',
             title: 'Photo Gallery'
           }}
         />
@@ -140,7 +185,7 @@ const App = () => {
           name="WeatherAppStack" 
           component={WeatherStackNavigator}
           options={{ 
-            drawerLabel: '🌤️ Weather App (HW4)',
+            drawerLabel: 'Weather App (HW4)',
             title: 'Weather App'
           }}
         />

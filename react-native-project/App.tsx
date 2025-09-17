@@ -13,6 +13,7 @@ import ForecastTabScreen from './screens/ForecastTabScreen';
 import ScannerScreen from './screens/ScannerScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
+import ShakeToChargeScreen from './screens/ShakeToChargeScreen';
 
 export interface ImageData {
   id: number;
@@ -51,6 +52,7 @@ export type DrawerParamList = {
   PhotoGalleryStack: undefined;
   WeatherAppStack: undefined;
   ScannerAppStack: NavigatorScreenParams<ScannerTabParamList>;
+  ShakeToChargeStack: undefined;
 };
 
 const PhotoGalleryStack = createStackNavigator<PhotoGalleryStackParamList>();
@@ -299,6 +301,14 @@ const App = () => {
           options={{ 
             drawerLabel: 'QR Scanner (Midterm)',
             title: 'QR Scanner'
+          }}
+        />
+        <Drawer.Screen 
+          name="ShakeToChargeStack" 
+          component={ShakeToChargeScreen}
+          options={{ 
+            drawerLabel: 'Shake to Charge (Week 6)',
+            title: 'Shake to Charge'
           }}
         />
       </Drawer.Navigator>

@@ -20,8 +20,11 @@ import ProductDetailScreen from './screens/ProductDetailScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 
 // Week 6 Screens
-import ShakeToChargeScreen from './screens/ShakeToChargeScreen'; // Class assignment
-import ShakeChargeHomeworkScreen from './screens/ShakeChargeHomeworkScreen'; // Homework assignment
+import ShakeToChargeScreen from './screens/ShakeToChargeScreen';
+import ShakeChargeHomeworkScreen from './screens/ShakeChargeHomeworkScreen'; 
+
+// Week 8 Screen
+import WebViewScreen from './screens/WebViewScreen';
 
 // Data Types
 export interface ImageData {
@@ -52,6 +55,7 @@ export type DrawerParamList = {
   ScannerAppStack: undefined;
   ShakeToChargeStack: undefined;
   ShakeChargeHomeworkStack: undefined;
+  WebViewStack: undefined;
 };
 
 // Create navigators
@@ -163,7 +167,7 @@ const App = () => {
         translucent={Platform.OS === 'android'}
       />
       <Drawer.Navigator
-        initialRouteName="PhotoGalleryStack"
+        initialRouteName="WebViewStack"
         screenOptions={{
           headerShown: false,
           drawerPosition: 'right',
@@ -220,6 +224,15 @@ const App = () => {
           options={{ 
             drawerLabel: 'Shake to Charge (Week 6 HW)',
             title: 'Shake to Charge - Homework',
+            headerShown: true,
+          }}
+        />
+        <Drawer.Screen 
+          name="WebViewStack" 
+          component={WebViewScreen}
+          options={{ 
+            drawerLabel: 'WebView (Week 8)',
+            title: 'Native WebView',
             headerShown: true,
           }}
         />

@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { DrawerParamList } from '../App';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { ScannerStackParamList } from '../App';
 import { useFavorites } from '../hooks/useFavorites';
 import { Product } from '../data/products';
 
-type FavoritesNavigationProp = DrawerNavigationProp<DrawerParamList>;
+type FavoritesNavigationProp = BottomTabNavigationProp<ScannerStackParamList, 'Favorites'>;
 
 const FavoritesScreen = () => {
   const { favorites, loading, refreshFavorites } = useFavorites();
@@ -20,16 +20,10 @@ const FavoritesScreen = () => {
   );
 
   const handleProductPress = (product: Product) => {
-    // Navigate to ProductDetail in the Scanner Tab stack
-    navigation.navigate('ScannerAppStack', {
-      screen: 'ScannerTab',
-      params: {
-        screen: 'ProductDetail',
-        params: {
-          productId: product.id,
-          productUrl: `https://fakestoreapi.com/products/${product.id}`,
-        },
-      },
+    // Navigate to ProductDetail within the same tab navigator
+    navigation.navigate('ProductDetail', {
+      productId: product.id,
+      productUrl: `https://fakestoreapi.com/products/${product.id}`,
     });
   };
 

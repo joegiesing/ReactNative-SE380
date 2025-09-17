@@ -3,79 +3,67 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigatorScreenParams } from '@react-navigation/native';
 import { StatusBar, Platform, Text } from 'react-native';
+
+// Photo Gallery Screens
 import PhotoGallery from './screens/PhotoGallery';
 import PhotoDetailScreen from './screens/PhotoDetailScreen';
 import PhotoModal from './screens/PhotoModal';
+
+// Weather App Screens  
 import CurrentWeatherScreen from './screens/CurrentWeatherScreen';
 import ForecastTabScreen from './screens/ForecastTabScreen';
+
+// Scanner App Screens
 import ScannerScreen from './screens/ScannerScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
-import ShakeToChargeScreen from './screens/ShakeToChargeScreen';
 
+// Week 6 Screens
+import ShakeToChargeScreen from './screens/ShakeToChargeScreen'; // Class assignment
+import ShakeChargeHomeworkScreen from './screens/ShakeChargeHomeworkScreen'; // Homework assignment
+
+// Data Types
 export interface ImageData {
   id: number;
   url: string;
 }
 
+// Navigation Types
 export type PhotoGalleryStackParamList = {
   PhotoGallery: undefined;
   PhotoDetail: { photo: ImageData };
   PhotoModal: { photo: ImageData };
 };
 
-export type WeatherDrawerParamList = {
-  CurrentWeather: undefined;
-  Forecast: undefined;
-};
-
 export type WeatherStackParamList = {
-  WeatherDrawer: undefined;
+  WeatherTabs: undefined;
 };
 
 export type ScannerStackParamList = {
   Scanner: undefined;
-  ProductDetail: { 
-    productId: number; 
-    productUrl: string; 
-  };
-};
-
-export type ScannerTabParamList = {
-  ScannerTab: NavigatorScreenParams<ScannerStackParamList>;
-  FavoritesTab: undefined;
+  ProductDetail: { productId: number; productUrl: string };
+  Favorites: undefined;
 };
 
 export type DrawerParamList = {
   PhotoGalleryStack: undefined;
   WeatherAppStack: undefined;
-  ScannerAppStack: NavigatorScreenParams<ScannerTabParamList>;
+  ScannerAppStack: undefined;
   ShakeToChargeStack: undefined;
+  ShakeChargeHomeworkStack: undefined;
 };
 
+// Create navigators
+const Drawer = createDrawerNavigator<DrawerParamList>();
 const PhotoGalleryStack = createStackNavigator<PhotoGalleryStackParamList>();
 const WeatherStack = createStackNavigator<WeatherStackParamList>();
-const WeatherDrawer = createDrawerNavigator<WeatherDrawerParamList>();
-const ScannerStack = createStackNavigator<ScannerStackParamList>();
-const ScannerTab = createBottomTabNavigator<ScannerTabParamList>();
-const Drawer = createDrawerNavigator<DrawerParamList>();
+const ScannerTab = createBottomTabNavigator<ScannerStackParamList>();
 
 // Photo Gallery Stack Navigator
 const PhotoGalleryStackNavigator = () => {
   return (
-    <PhotoGalleryStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#fff',
-        },
-        headerTintColor: '#000',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
-    >
+    <PhotoGalleryStack.Navigator>
       <PhotoGalleryStack.Screen 
         name="PhotoGallery" 
         component={PhotoGallery}
@@ -84,132 +72,34 @@ const PhotoGalleryStackNavigator = () => {
       <PhotoGalleryStack.Screen 
         name="PhotoDetail" 
         component={PhotoDetailScreen}
-        options={{ title: 'Photo Detail' }}
+        options={{ title: 'Photo Detail', headerShown: false }}
       />
       <PhotoGalleryStack.Screen 
         name="PhotoModal" 
         component={PhotoModal}
-        options={{
+        options={{ 
           presentation: 'modal',
-          headerStyle: {
-            backgroundColor: '#000',
-            borderBottomWidth: 0,
-            shadowOpacity: 0,
-            elevation: 0,
-          },
-          headerTintColor: '#fff',
-          headerTitle: '',
+          headerShown: false
         }}
       />
     </PhotoGalleryStack.Navigator>
   );
 };
 
-// Weather App Drawer Navigator
-const WeatherDrawerNavigator = () => {
-  return (
-    <WeatherDrawer.Navigator
-      screenOptions={{
-        headerShown: true,
-        drawerPosition: 'left',
-        drawerType: 'back',
-        swipeEnabled: true,
-        drawerStyle: {
-          backgroundColor: '#f8f9fa',
-          width: 280,
-        },
-        drawerActiveTintColor: '#007AFF',
-        drawerInactiveTintColor: '#666',
-        drawerLabelStyle: {
-          fontSize: 16,
-          fontWeight: '500',
-        },
-        headerStyle: {
-          backgroundColor: '#007AFF',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
-    >
-      <WeatherDrawer.Screen 
-        name="CurrentWeather" 
-        component={CurrentWeatherScreen}
-        options={{ 
-          drawerLabel: 'Current Weather',
-          title: 'Current Weather'
-        }}
-      />
-      <WeatherDrawer.Screen 
-        name="Forecast" 
-        component={ForecastTabScreen}
-        options={{ 
-          drawerLabel: 'Forecast',
-          title: 'Weather Forecast'
-        }}
-      />
-    </WeatherDrawer.Navigator>
-  );
-};
-
-// Weather App Stack Navigator
+// Weather Stack Navigator
 const WeatherStackNavigator = () => {
   return (
-    <WeatherStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <WeatherStack.Navigator>
       <WeatherStack.Screen 
-        name="WeatherDrawer" 
-        component={WeatherDrawerNavigator}
+        name="WeatherTabs" 
+        component={ForecastTabScreen}
+        options={{ headerShown: false }}
       />
     </WeatherStack.Navigator>
   );
 };
 
-// Scanner Stack Navigator (contains Scanner and ProductDetail)
-const ScannerStackNavigator = () => {
-  return (
-    <ScannerStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#000',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
-    >
-      <ScannerStack.Screen 
-        name="Scanner" 
-        component={ScannerScreen}
-        options={{ 
-          title: 'QR Code Scanner',
-          headerStyle: {
-            backgroundColor: '#000',
-          },
-          headerTintColor: '#fff',
-        }}
-      />
-      <ScannerStack.Screen 
-        name="ProductDetail" 
-        component={ProductDetailScreen}
-        options={{ 
-          title: 'Product Details',
-          headerStyle: {
-            backgroundColor: '#fff',
-          },
-          headerTintColor: '#000',
-        }}
-      />
-    </ScannerStack.Navigator>
-  );
-};
-
-// Scanner Tab Navigator (main scanner app structure)
+// Scanner Tab Navigator (Midterm Project)
 const ScannerTabNavigator = () => {
   return (
     <ScannerTab.Navigator
@@ -220,26 +110,38 @@ const ScannerTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: '#fff',
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
-        },
-        tabBarLabelStyle: {
-          fontSize: 14,
-          fontWeight: '600',
+          borderTopColor: '#E1E1E1',
         },
       }}
     >
       <ScannerTab.Screen 
-        name="ScannerTab" 
-        component={ScannerStackNavigator}
+        name="Scanner" 
+        component={ScannerScreen}
         options={{
           tabBarLabel: 'Scanner',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 24, color }}>📷</Text>
+            <Text style={{ fontSize: 24, color }}>📱</Text>
+          ),
+        }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('Scanner');
+          },
+        })}
+      />
+      <ScannerTab.Screen 
+        name="ProductDetail" 
+        component={ProductDetailScreen}
+        options={{
+          tabBarLabel: 'Product',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 24, color }}>📦</Text>
           ),
         }}
       />
       <ScannerTab.Screen 
-        name="FavoritesTab" 
+        name="Favorites" 
         component={FavoritesScreen}
         options={{
           tabBarLabel: 'Favorites',
@@ -269,7 +171,7 @@ const App = () => {
           swipeEnabled: true,
           drawerStyle: {
             backgroundColor: '#f8f9fa',
-            width: 280,
+            width: 300,
           },
           drawerActiveTintColor: '#007AFF',
           drawerInactiveTintColor: '#666',
@@ -307,8 +209,18 @@ const App = () => {
           name="ShakeToChargeStack" 
           component={ShakeToChargeScreen}
           options={{ 
-            drawerLabel: 'Shake to Charge (Week 6)',
-            title: 'Shake to Charge'
+            drawerLabel: 'Shake to Charge (Week 6 Class)',
+            title: 'Shake to Charge - Class',
+            headerShown: true,
+          }}
+        />
+        <Drawer.Screen 
+          name="ShakeChargeHomeworkStack" 
+          component={ShakeChargeHomeworkScreen}
+          options={{ 
+            drawerLabel: 'Shake to Charge (Week 6 HW)',
+            title: 'Shake to Charge - Homework',
+            headerShown: true,
           }}
         />
       </Drawer.Navigator>

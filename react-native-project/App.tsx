@@ -8,6 +8,7 @@ import PhotoDetailScreen from './screens/PhotoDetailScreen';
 import PhotoModal from './screens/PhotoModal';
 import CurrentWeatherScreen from './screens/CurrentWeatherScreen';
 import ForecastTabScreen from './screens/ForecastTabScreen';
+import ScannerScreen from './screens/ScannerScreen';
 
 export interface ImageData {
   id: number;
@@ -29,14 +30,20 @@ export type WeatherStackParamList = {
   WeatherDrawer: undefined;
 };
 
+export type ScannerStackParamList = {
+  Scanner: undefined;
+};
+
 export type DrawerParamList = {
   PhotoGalleryStack: undefined;
   WeatherAppStack: undefined;
+  ScannerAppStack: undefined;
 };
 
 const PhotoGalleryStack = createStackNavigator<PhotoGalleryStackParamList>();
 const WeatherStack = createStackNavigator<WeatherStackParamList>();
 const WeatherDrawer = createDrawerNavigator<WeatherDrawerParamList>();
+const ScannerStack = createStackNavigator<ScannerStackParamList>();
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 // Photo Gallery Stack Navigator
@@ -146,6 +153,35 @@ const WeatherStackNavigator = () => {
   );
 };
 
+// Scanner App Stack Navigator
+const ScannerStackNavigator = () => {
+  return (
+    <ScannerStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#000',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <ScannerStack.Screen 
+        name="Scanner" 
+        component={ScannerScreen}
+        options={{ 
+          title: 'QR Code Scanner',
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+    </ScannerStack.Navigator>
+  );
+};
+
 const App = () => {
   return (
     <NavigationContainer>
@@ -187,6 +223,14 @@ const App = () => {
           options={{ 
             drawerLabel: 'Weather App (HW4)',
             title: 'Weather App'
+          }}
+        />
+        <Drawer.Screen 
+          name="ScannerAppStack" 
+          component={ScannerStackNavigator}
+          options={{ 
+            drawerLabel: 'QR Scanner (HW5)',
+            title: 'QR Scanner'
           }}
         />
       </Drawer.Navigator>

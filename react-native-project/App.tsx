@@ -185,7 +185,7 @@ const App = () => {
           name="PhotoGalleryStack" 
           component={PhotoGalleryStackNavigator}
           options={{ 
-            drawerLabel: 'Photo Gallery (HW2 & HW3)',
+            drawerLabel: 'Photo Gallery (HW2 & HW3 + Week 7)',
             title: 'Photo Gallery'
           }}
         />

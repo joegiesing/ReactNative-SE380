@@ -1,12 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Text, View, StyleSheet, Button, Alert, SafeAreaView } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ScannerStackParamList } from '../App';
+import { extractProductIdFromUrl } from '../data/products';
+
+type ScannerNavigationProp = StackNavigationProp<ScannerStackParamList, 'Scanner'>;
 
 const ScannerScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
   const scannedRef = useRef(false);
   const [permission, requestPermission] = useCameraPermissions();
+  const navigation = useNavigation<ScannerNavigationProp>();
 
   React.useEffect(() => {
     if (permission?.granted) {
@@ -22,17 +29,37 @@ const ScannerScreen = () => {
     scannedRef.current = true;
     setScanned(true);
     
-    // Display the scanned URL in an alert as required
-    Alert.alert(
-      'QR Code Scanned',
-      `URL: ${data}`,
-      [
-        {
-          text: 'OK',
-          onPress: resetScanner,
-        },
-      ]
-    );
+    console.log('Scanned URL:', data); // Debug log
+    
+    // Extract product ID from the scanned URL
+    const productId = extractProductIdFromUrl(data);
+    console.log('Extracted Product ID:', productId); // Debug log
+    
+    if (productId && productId >= 1 && productId <= 20) {
+      // Navigate to ProductDetail with the scanned URL
+      navigation.navigate('ProductDetail', { 
+        productUrl: data,
+        productId: productId 
+      });
+      
+      // Reset scanner after navigation
+      setTimeout(() => {
+        scannedRef.current = false;
+        setScanned(false);
+      }, 1000);
+    } else {
+      // Show alert if URL doesn't contain valid product ID
+      Alert.alert(
+        'Invalid QR Code',
+        `URL: ${data}\n\nThis QR code doesn't contain a valid product ID (1-20).`,
+        [
+          {
+            text: 'OK',
+            onPress: resetScanner,
+          },
+        ]
+      );
+    }
   };
 
   const resetScanner = () => {
